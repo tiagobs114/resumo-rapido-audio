@@ -1,6 +1,6 @@
 
 import React, { useState } from 'react';
-import { Check, Download, Edit, FileText, Save, Stethoscope, HeartPulse, Brain, Bone, Users } from 'lucide-react';
+import { Check, Download, Edit, FileText, Save, Stethoscope, HeartPulse, Brain, Bone, Users, Pill } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
 import { Input } from '@/components/ui/input';
@@ -44,6 +44,8 @@ const ReportEditor: React.FC<ReportEditorProps> = ({
         return <Bone className="h-5 w-5 text-amber-600" />;
       case 'pediatric':
         return <Users className="h-5 w-5 text-green-500" />;
+      case 'oncology':
+        return <Pill className="h-5 w-5 text-rose-600" />;
       default:
         return <FileText className="h-5 w-5 text-gray-600" />;
     }
@@ -61,6 +63,8 @@ const ReportEditor: React.FC<ReportEditorProps> = ({
         return 'bg-amber-100 text-amber-700';
       case 'pediatric':
         return 'bg-green-100 text-green-700';
+      case 'oncology':
+        return 'bg-rose-100 text-rose-700';
       default:
         return 'bg-gray-100 text-gray-700';
     }

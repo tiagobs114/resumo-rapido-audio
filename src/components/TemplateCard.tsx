@@ -8,7 +8,8 @@ import {
   Bone,
   Users,
   Plus,
-  Sparkles
+  Sparkles,
+  Pill
 } from 'lucide-react';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -18,7 +19,7 @@ export interface TemplateProps {
   id: string;
   title: string;
   description: string;
-  icon: 'general' | 'cardio' | 'neuro' | 'ortho' | 'pediatric' | 'custom' | 'create';
+  icon: 'general' | 'cardio' | 'neuro' | 'ortho' | 'pediatric' | 'custom' | 'create' | 'oncology';
   popular?: boolean;
   onClick: (id: string) => void;
 }
@@ -36,6 +37,8 @@ const TemplateCard = ({ id, title, description, icon, popular, onClick }: Templa
         return <Bone className="h-8 w-8 text-amber-600" />;
       case 'pediatric':
         return <Users className="h-8 w-8 text-green-500" />;
+      case 'oncology':
+        return <Pill className="h-8 w-8 text-rose-600" />;
       case 'custom':
         return <Sparkles className="h-8 w-8 text-amber-500" />;
       case 'create':

@@ -53,6 +53,13 @@ const Index = () => {
       onClick: () => handleTemplateSelect('neuro')
     },
     {
+      id: 'oncology',
+      title: 'Anamnese Oncológica',
+      description: 'Modelo especializado para consultas oncológicas com histórico, sintomas e plano terapêutico.',
+      icon: 'oncology',
+      onClick: () => handleTemplateSelect('oncology')
+    },
+    {
       id: 'custom',
       title: 'Template Personalizado',
       description: 'Crie seu próprio modelo de relatório com instruções personalizadas.',

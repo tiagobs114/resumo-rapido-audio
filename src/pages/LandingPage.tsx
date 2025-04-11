@@ -61,6 +61,13 @@ const LandingPage = () => {
       onClick: () => handleTemplateSelect('pediatric')
     },
     {
+      id: 'oncology',
+      title: 'Oncologia',
+      description: 'Anamnese especializada para pacientes oncológicos, incluindo histórico de tratamentos e sintomas específicos.',
+      icon: 'oncology',
+      onClick: () => handleTemplateSelect('oncology')
+    },
+    {
       id: 'custom',
       title: 'Modelo Personalizado',
       description: 'Crie seu próprio modelo de anamnese com campos e estrutura personalizados.',
