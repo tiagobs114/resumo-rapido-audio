@@ -14,14 +14,14 @@ const Header = () => {
         </Link>
         
         <nav className="hidden md:flex items-center gap-6">
-          <Link to="/" className="text-muted-foreground hover:text-foreground transition-colors flex items-center gap-2">
-            <Home className="h-4 w-4" />
-            <span>Início</span>
-          </Link>
-          <Link to="/templates" className="text-muted-foreground hover:text-foreground transition-colors flex items-center gap-2">
+          <a href="#how-it-works" className="text-muted-foreground hover:text-foreground transition-colors flex items-center gap-2">
             <FileText className="h-4 w-4" />
-            <span>Templates</span>
-          </Link>
+            <span>Como Funciona</span>
+          </a>
+          <a href="#features" className="text-muted-foreground hover:text-foreground transition-colors flex items-center gap-2">
+            <Home className="h-4 w-4" />
+            <span>Recursos</span>
+          </a>
         </nav>
         
         <div className="flex items-center gap-4">
