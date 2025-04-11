@@ -1,6 +1,6 @@
 
 import React, { useState, useRef } from 'react';
-import { Mic, MicOff, Paperclip, StopCircle, Trash2, Upload } from 'lucide-react';
+import { Mic, MicOff, Paperclip, StopCircle, Trash2, Upload, FileAudio } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Progress } from '@/components/ui/progress';
 import { toast } from 'sonner';
