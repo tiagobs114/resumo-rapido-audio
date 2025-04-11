@@ -1,6 +1,6 @@
-
 import React, { useState } from 'react';
 import Header from '@/components/Header';
+import HeroSection from '@/components/HeroSection';
 import TemplateCard, { TemplateProps } from '@/components/TemplateCard';
 import AudioRecorder from '@/components/AudioRecorder';
 import TranscriptionViewer from '@/components/TranscriptionViewer';
@@ -22,7 +22,6 @@ const LandingPage = () => {
   const [report, setReport] = useState<{ title: string; content: string } | null>(null);
   const [activeTab, setActiveTab] = useState('templates');
 
-  // Available templates
   const templates: TemplateProps[] = [
     {
       id: 'meeting',
@@ -128,24 +127,19 @@ const LandingPage = () => {
     <div className="min-h-screen flex flex-col">
       <Header />
       
-      <main className="flex-1 py-8">
-        <div className="container mx-auto px-4">
+      <main className="flex-1">
+        <HeroSection />
+        
+        <div className="py-16 container mx-auto px-4">
           <div className="max-w-6xl mx-auto">
-            <div className="mb-8">
-              <h1 className="text-4xl font-bold text-center">Resumo Rápido</h1>
-              <p className="text-xl text-center text-muted-foreground mt-2">
-                Transforme áudios em relatórios profissionais em segundos
-              </p>
-            </div>
-            
-            <Card className="mb-6">
+            <Card className="mb-6" id="templates">
               <CardContent className="p-0">
                 <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
                   <TabsList className="grid w-full grid-cols-4">
-                    <TabsTrigger value="templates">1. Template</TabsTrigger>
-                    <TabsTrigger value="audio" disabled={!selectedTemplate && activeTab !== 'audio'}>2. Áudio</TabsTrigger>
-                    <TabsTrigger value="transcription" disabled={!transcription && activeTab !== 'transcription'}>3. Transcrição</TabsTrigger>
-                    <TabsTrigger value="report" disabled={!report && activeTab !== 'report'}>4. Relatório</TabsTrigger>
+                    <TabsTrigger value="templates">Template</TabsTrigger>
+                    <TabsTrigger value="audio" disabled={!selectedTemplate && activeTab !== 'audio'}>Áudio</TabsTrigger>
+                    <TabsTrigger value="transcription" disabled={!transcription && activeTab !== 'transcription'}>Transcrição</TabsTrigger>
+                    <TabsTrigger value="report" disabled={!report && activeTab !== 'report'}>Relatório</TabsTrigger>
                   </TabsList>
                   
                   <div className="p-6">
