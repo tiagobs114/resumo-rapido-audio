@@ -1,6 +1,6 @@
 
 import React, { useState } from 'react';
-import { Check, Download, Edit, FileText, Save } from 'lucide-react';
+import { Check, Download, Edit, FileText, Save, Stethoscope, HeartPulse, Brain, Bone, Users } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
 import { Input } from '@/components/ui/input';
@@ -25,7 +25,7 @@ const ReportEditor: React.FC<ReportEditorProps> = ({
   
   const handleSave = () => {
     setIsEditing(false);
-    toast.success('Relatório salvo com sucesso!');
+    toast.success('Anamnese salva com sucesso!');
   };
   
   const handleDownload = () => {
@@ -34,14 +34,35 @@ const ReportEditor: React.FC<ReportEditorProps> = ({
 
   const getTemplateIcon = () => {
     switch (templateType) {
-      case 'meeting':
-        return 'bg-app-blue-100 text-app-blue-500';
-      case 'medical':
-        return 'bg-app-purple-100 text-app-purple-500';
-      case 'class':
-        return 'bg-app-blue-100 text-app-blue-600';
+      case 'general':
+        return <Stethoscope className="h-5 w-5 text-app-purple-500" />;
+      case 'cardio':
+        return <HeartPulse className="h-5 w-5 text-red-500" />;
+      case 'neuro':
+        return <Brain className="h-5 w-5 text-app-blue-600" />;
+      case 'ortho':
+        return <Bone className="h-5 w-5 text-amber-600" />;
+      case 'pediatric':
+        return <Users className="h-5 w-5 text-green-500" />;
       default:
-        return 'bg-gray-100 text-gray-600';
+        return <FileText className="h-5 w-5 text-gray-600" />;
+    }
+  };
+
+  const getTemplateClass = () => {
+    switch (templateType) {
+      case 'general':
+        return 'bg-app-purple-100 text-app-purple-700';
+      case 'cardio':
+        return 'bg-red-100 text-red-700';
+      case 'neuro':
+        return 'bg-app-blue-100 text-app-blue-700';
+      case 'ortho':
+        return 'bg-amber-100 text-amber-700';
+      case 'pediatric':
+        return 'bg-green-100 text-green-700';
+      default:
+        return 'bg-gray-100 text-gray-700';
     }
   };
 
@@ -49,8 +70,8 @@ const ReportEditor: React.FC<ReportEditorProps> = ({
     <div className="w-full max-w-3xl mx-auto bg-card rounded-xl shadow-sm p-6">
       <div className="flex items-center justify-between mb-6">
         <div className="flex items-center gap-3">
-          <div className={`h-10 w-10 rounded-full flex items-center justify-center ${getTemplateIcon()}`}>
-            <FileText className="h-5 w-5" />
+          <div className={`h-10 w-10 rounded-full flex items-center justify-center ${getTemplateClass()}`}>
+            {getTemplateIcon()}
           </div>
           {isEditing ? (
             <Input 

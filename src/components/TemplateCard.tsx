@@ -1,10 +1,12 @@
 
 import React from 'react';
 import { 
-  FileText, 
-  Users, 
   Stethoscope, 
-  GraduationCap,
+  FileText,
+  Brain,
+  HeartPulse,
+  Bone,
+  Users,
   Plus,
   Sparkles
 } from 'lucide-react';
@@ -16,7 +18,7 @@ export interface TemplateProps {
   id: string;
   title: string;
   description: string;
-  icon: 'meeting' | 'medical' | 'class' | 'custom' | 'create';
+  icon: 'general' | 'cardio' | 'neuro' | 'ortho' | 'pediatric' | 'custom' | 'create';
   popular?: boolean;
   onClick: (id: string) => void;
 }
@@ -24,12 +26,16 @@ export interface TemplateProps {
 const TemplateCard = ({ id, title, description, icon, popular, onClick }: TemplateProps) => {
   const renderIcon = () => {
     switch (icon) {
-      case 'meeting':
-        return <Users className="h-8 w-8 text-app-blue-500" />;
-      case 'medical':
+      case 'general':
         return <Stethoscope className="h-8 w-8 text-app-purple-500" />;
-      case 'class':
-        return <GraduationCap className="h-8 w-8 text-app-blue-600" />;
+      case 'cardio':
+        return <HeartPulse className="h-8 w-8 text-red-500" />;
+      case 'neuro':
+        return <Brain className="h-8 w-8 text-app-blue-600" />;
+      case 'ortho':
+        return <Bone className="h-8 w-8 text-amber-600" />;
+      case 'pediatric':
+        return <Users className="h-8 w-8 text-green-500" />;
       case 'custom':
         return <Sparkles className="h-8 w-8 text-amber-500" />;
       case 'create':
