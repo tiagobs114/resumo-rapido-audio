@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import Header from '@/components/Header';
 import HeroSection from '@/components/HeroSection';
@@ -8,7 +9,7 @@ import ReportEditor from '@/components/ReportEditor';
 import CreateCustomTemplate from '@/components/CreateCustomTemplate';
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Card, CardContent } from '@/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from '@/components/ui/card';
 import { ChevronRight, FileAudio, FileText, Wand2 } from 'lucide-react';
 import { transcribeAudio, generateReport } from '@/utils/audioUtils';
 import { downloadPDF } from '@/utils/pdfUtils';

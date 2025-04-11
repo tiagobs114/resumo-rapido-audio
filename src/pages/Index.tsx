@@ -31,26 +31,26 @@ const Index = () => {
   // Available templates
   const templates: TemplateProps[] = [
     {
-      id: 'meeting',
+      id: 'general',
       title: 'Ata de Reunião',
       description: 'Transforma gravações de reuniões em atas estruturadas com pontos de ação e decisões.',
-      icon: 'meeting',
+      icon: 'general',
       popular: true,
-      onClick: () => handleTemplateSelect('meeting')
+      onClick: () => handleTemplateSelect('general')
     },
     {
-      id: 'medical',
+      id: 'cardio',
       title: 'Anamnese Médica',
       description: 'Organiza informações médicas em formato de anamnese com sintomas e histórico.',
-      icon: 'medical',
-      onClick: () => handleTemplateSelect('medical')
+      icon: 'cardio',
+      onClick: () => handleTemplateSelect('cardio')
     },
     {
-      id: 'class',
+      id: 'neuro',
       title: 'Resumo de Aula',
       description: 'Cria resumos organizados de aulas com conceitos-chave e pontos importantes.',
-      icon: 'class',
-      onClick: () => handleTemplateSelect('class')
+      icon: 'neuro',
+      onClick: () => handleTemplateSelect('neuro')
     },
     {
       id: 'custom',
