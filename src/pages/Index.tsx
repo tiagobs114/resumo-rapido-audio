@@ -1,26 +1,34 @@
-import React, { useState, useEffect } from 'react';
+
+import React, { useState } from 'react';
 import Header from '@/components/Header';
 import AudioRecorder from '@/components/AudioRecorder';
-import TranscriptionViewer from '@/components/TranscriptionViewer';
 import ReportEditor from '@/components/ReportEditor';
 import { Button } from '@/components/ui/button';
-import { FileAudio, FileText, Wand2 } from 'lucide-react';
+import { FileAudio, FileText } from 'lucide-react';
 import { transcribeAudio, generateReport } from '@/utils/audioUtils';
 import { downloadPDF } from '@/utils/pdfUtils';
 import { toast } from 'sonner';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 enum AppStage {
   AUDIO_INPUT,
-  TRANSCRIPTION,
   REPORT
 }
 
 const Index = () => {
   const [stage, setStage] = useState<AppStage>(AppStage.AUDIO_INPUT);
-  const [selectedTemplate] = useState<string>('general');
   const [audioBlob, setAudioBlob] = useState<Blob | null>(null);
   const [transcription, setTranscription] = useState<string>('');
-  const [report, setReport] = useState<{ title: string; content: string } | null>(null);
+  const [reports, setReports] = useState<{
+    doctor: { title: string; content: string } | null;
+    secretary: { title: string; content: string } | null;
+    patient: { title: string; content: string } | null;
+  }>({
+    doctor: null,
+    secretary: null,
+    patient: null
+  });
+  const [activeReportTab, setActiveReportTab] = useState<'doctor' | 'secretary' | 'patient'>('doctor');
 
   const handleAudioReady = async (audio: Blob) => {
     setAudioBlob(audio);
@@ -30,7 +38,7 @@ const Index = () => {
         loading: 'Transcrevendo o áudio...',
         success: (data) => {
           setTranscription(data);
-          setStage(AppStage.TRANSCRIPTION);
+          generateAllReports(data);
           return 'Transcrição concluída!';
         },
         error: 'Erro na transcrição. Tente novamente.'
@@ -38,21 +46,25 @@ const Index = () => {
     );
   };
 
-  const handleTranscriptionEdit = (editedText: string) => {
-    setTranscription(editedText);
-  };
-
-  const handleGenerateReport = async () => {
+  const generateAllReports = async (transcriptionText: string) => {
     toast.promise(
-      generateReport(transcription, 'general', undefined),
+      Promise.all([
+        generateReport(transcriptionText, 'doctor', undefined),
+        generateReport(transcriptionText, 'secretary', undefined),
+        generateReport(transcriptionText, 'patient', undefined)
+      ]),
       {
-        loading: 'Gerando relatório...',
+        loading: 'Gerando anamneses...',
         success: (data) => {
-          setReport(data);
+          setReports({
+            doctor: data[0],
+            secretary: data[1],
+            patient: data[2]
+          });
           setStage(AppStage.REPORT);
-          return 'Relatório gerado com sucesso!';
+          return 'Anamneses geradas com sucesso!';
         },
-        error: 'Erro ao gerar relatório. Tente novamente.'
+        error: 'Erro ao gerar anamneses. Tente novamente.'
       }
     );
   };
@@ -72,33 +84,54 @@ const Index = () => {
     switch (stage) {
       case AppStage.AUDIO_INPUT:
         return <AudioRecorder onAudioReady={handleAudioReady} />;
-      case AppStage.TRANSCRIPTION:
+      case AppStage.REPORT:
         return (
           <div className="container mx-auto px-4">
-            <TranscriptionViewer 
-              transcription={transcription} 
-              onEditComplete={handleTranscriptionEdit} 
-            />
-            <div className="flex justify-center mt-8">
-              <Button 
-                size="lg" 
-                onClick={handleGenerateReport}
-                className="px-6 gap-2"
-              >
-                Gerar Relatório
-                <Wand2 className="h-4 w-4" />
-              </Button>
-            </div>
+            <Tabs
+              value={activeReportTab}
+              onValueChange={(value) => setActiveReportTab(value as 'doctor' | 'secretary' | 'patient')}
+              className="w-full"
+            >
+              <TabsList className="grid w-full grid-cols-3 mb-6">
+                <TabsTrigger value="doctor">Médico</TabsTrigger>
+                <TabsTrigger value="secretary">Secretária</TabsTrigger>
+                <TabsTrigger value="patient">Paciente</TabsTrigger>
+              </TabsList>
+              
+              <TabsContent value="doctor">
+                {reports.doctor && (
+                  <ReportEditor
+                    reportTitle={reports.doctor.title}
+                    initialContent={reports.doctor.content}
+                    templateType="general"
+                    onDownloadPDF={handleDownloadPDF}
+                  />
+                )}
+              </TabsContent>
+              
+              <TabsContent value="secretary">
+                {reports.secretary && (
+                  <ReportEditor
+                    reportTitle={reports.secretary.title}
+                    initialContent={reports.secretary.content}
+                    templateType="general"
+                    onDownloadPDF={handleDownloadPDF}
+                  />
+                )}
+              </TabsContent>
+              
+              <TabsContent value="patient">
+                {reports.patient && (
+                  <ReportEditor
+                    reportTitle={reports.patient.title}
+                    initialContent={reports.patient.content}
+                    templateType="general"
+                    onDownloadPDF={handleDownloadPDF}
+                  />
+                )}
+              </TabsContent>
+            </Tabs>
           </div>
-        );
-      case AppStage.REPORT:
-        return report && (
-          <ReportEditor
-            reportTitle={report.title}
-            initialContent={report.content}
-            templateType={'general'}
-            onDownloadPDF={handleDownloadPDF}
-          />
         );
       default:
         return <div>Algo deu errado. Por favor, recarregue a página.</div>;
@@ -108,8 +141,7 @@ const Index = () => {
   const renderStageIndicator = () => {
     const stages = [
       { name: 'Áudio', icon: FileAudio, stage: AppStage.AUDIO_INPUT },
-      { name: 'Transcrição', icon: FileText, stage: AppStage.TRANSCRIPTION },
-      { name: 'Relatório', icon: Wand2, stage: AppStage.REPORT }
+      { name: 'Anamnese', icon: FileText, stage: AppStage.REPORT }
     ];
     
     return (
@@ -149,10 +181,8 @@ const Index = () => {
   const canGoBack = stage > AppStage.AUDIO_INPUT;
   
   const handleGoBack = () => {
-    if (stage === AppStage.TRANSCRIPTION) {
+    if (stage === AppStage.REPORT) {
       setStage(AppStage.AUDIO_INPUT);
-    } else if (stage === AppStage.REPORT) {
-      setStage(AppStage.TRANSCRIPTION);
     }
   };
 
@@ -160,7 +190,7 @@ const Index = () => {
     <div className="min-h-screen flex flex-col">
       <Header />
       <main className="flex-1 py-8">
-        {stage !== AppStage.AUDIO_INPUT && renderStageIndicator()}
+        {renderStageIndicator()}
         
         {canGoBack && (
           <div className="container mx-auto px-4 mb-6">
