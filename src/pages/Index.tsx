@@ -1,57 +1,26 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Header from '@/components/Header';
-import TemplateCard, { TemplateProps } from '@/components/TemplateCard';
 import AudioRecorder from '@/components/AudioRecorder';
 import TranscriptionViewer from '@/components/TranscriptionViewer';
 import ReportEditor from '@/components/ReportEditor';
-import CreateCustomTemplate from '@/components/CreateCustomTemplate';
 import { Button } from '@/components/ui/button';
-import { ChevronRight, FileAudio, FileText, Wand2 } from 'lucide-react';
+import { FileAudio, FileText, Wand2 } from 'lucide-react';
 import { transcribeAudio, generateReport } from '@/utils/audioUtils';
 import { downloadPDF } from '@/utils/pdfUtils';
 import { toast } from 'sonner';
 
 enum AppStage {
-  TEMPLATE_SELECTION,
-  CUSTOM_TEMPLATE,
   AUDIO_INPUT,
   TRANSCRIPTION,
   REPORT
 }
 
 const Index = () => {
-  const [stage, setStage] = useState<AppStage>(AppStage.TEMPLATE_SELECTION);
-  const [selectedTemplate, setSelectedTemplate] = useState<string | null>(null);
-  const [customTemplate, setCustomTemplate] = useState<{ name: string; prompt: string } | null>(null);
+  const [stage, setStage] = useState<AppStage>(AppStage.AUDIO_INPUT);
+  const [selectedTemplate] = useState<string>('general');
   const [audioBlob, setAudioBlob] = useState<Blob | null>(null);
   const [transcription, setTranscription] = useState<string>('');
   const [report, setReport] = useState<{ title: string; content: string } | null>(null);
-
-  const templates: TemplateProps[] = [
-    {
-      id: 'general',
-      title: 'Anamnese Médica',
-      description: 'Gere anamneses médicas completas a partir do áudio da consulta.',
-      icon: 'general',
-      popular: true,
-      onClick: () => handleTemplateSelect('general')
-    }
-  ];
-
-  const handleTemplateSelect = (templateId: string) => {
-    setSelectedTemplate(templateId);
-    setStage(AppStage.AUDIO_INPUT);
-  };
-
-  const handleCustomTemplate = () => {
-    setStage(AppStage.CUSTOM_TEMPLATE);
-  };
-
-  const handleCustomTemplateCreated = (template: { name: string; prompt: string }) => {
-    setCustomTemplate(template);
-    setSelectedTemplate('custom');
-    setStage(AppStage.AUDIO_INPUT);
-  };
 
   const handleAudioReady = async (audio: Blob) => {
     setAudioBlob(audio);
@@ -74,11 +43,8 @@ const Index = () => {
   };
 
   const handleGenerateReport = async () => {
-    const templateType = selectedTemplate || 'default';
-    const customPrompt = customTemplate?.prompt;
-    
     toast.promise(
-      generateReport(transcription, templateType, customPrompt),
+      generateReport(transcription, 'general', undefined),
       {
         loading: 'Gerando relatório...',
         success: (data) => {
@@ -104,32 +70,8 @@ const Index = () => {
 
   const renderStageContent = () => {
     switch (stage) {
-      case AppStage.TEMPLATE_SELECTION:
-        return (
-          <div className="container max-w-4xl mx-auto px-4 py-8">
-            <h1 className="text-3xl font-bold text-center mb-8">Escolha o Modelo</h1>
-            <div className="grid grid-cols-1 gap-6">
-              {templates.map((template) => (
-                <TemplateCard 
-                  key={template.id}
-                  id={template.id}
-                  title={template.title}
-                  description={template.description}
-                  icon={template.icon}
-                  popular={template.popular}
-                  onClick={() => template.onClick(template.id)}
-                />
-              ))}
-            </div>
-          </div>
-        );
-        
-      case AppStage.CUSTOM_TEMPLATE:
-        return <CreateCustomTemplate onTemplateCreated={handleCustomTemplateCreated} />;
-        
       case AppStage.AUDIO_INPUT:
         return <AudioRecorder onAudioReady={handleAudioReady} />;
-        
       case AppStage.TRANSCRIPTION:
         return (
           <div className="container mx-auto px-4">
@@ -137,7 +79,6 @@ const Index = () => {
               transcription={transcription} 
               onEditComplete={handleTranscriptionEdit} 
             />
-            
             <div className="flex justify-center mt-8">
               <Button 
                 size="lg" 
@@ -150,17 +91,15 @@ const Index = () => {
             </div>
           </div>
         );
-        
       case AppStage.REPORT:
         return report && (
           <ReportEditor
             reportTitle={report.title}
             initialContent={report.content}
-            templateType={selectedTemplate || 'default'}
+            templateType={'general'}
             onDownloadPDF={handleDownloadPDF}
           />
         );
-        
       default:
         return <div>Algo deu errado. Por favor, recarregue a página.</div>;
     }
@@ -168,7 +107,6 @@ const Index = () => {
 
   const renderStageIndicator = () => {
     const stages = [
-      { name: 'Template', icon: FileText, stage: AppStage.TEMPLATE_SELECTION },
       { name: 'Áudio', icon: FileAudio, stage: AppStage.AUDIO_INPUT },
       { name: 'Transcrição', icon: FileText, stage: AppStage.TRANSCRIPTION },
       { name: 'Relatório', icon: Wand2, stage: AppStage.REPORT }
@@ -208,15 +146,10 @@ const Index = () => {
     );
   };
 
-  const canGoBack = stage > AppStage.TEMPLATE_SELECTION;
+  const canGoBack = stage > AppStage.AUDIO_INPUT;
   
   const handleGoBack = () => {
-    if (stage === AppStage.CUSTOM_TEMPLATE) {
-      setStage(AppStage.TEMPLATE_SELECTION);
-    } else if (stage === AppStage.AUDIO_INPUT) {
-      setStage(AppStage.TEMPLATE_SELECTION);
-      setSelectedTemplate(null);
-    } else if (stage === AppStage.TRANSCRIPTION) {
+    if (stage === AppStage.TRANSCRIPTION) {
       setStage(AppStage.AUDIO_INPUT);
     } else if (stage === AppStage.REPORT) {
       setStage(AppStage.TRANSCRIPTION);
@@ -226,9 +159,8 @@ const Index = () => {
   return (
     <div className="min-h-screen flex flex-col">
       <Header />
-      
       <main className="flex-1 py-8">
-        {stage !== AppStage.TEMPLATE_SELECTION && renderStageIndicator()}
+        {stage !== AppStage.AUDIO_INPUT && renderStageIndicator()}
         
         {canGoBack && (
           <div className="container mx-auto px-4 mb-6">
@@ -242,10 +174,8 @@ const Index = () => {
             </Button>
           </div>
         )}
-        
         {renderStageContent()}
       </main>
-      
       <footer className="py-6 border-t">
         <div className="container mx-auto px-4">
           <p className="text-center text-muted-foreground text-sm">
