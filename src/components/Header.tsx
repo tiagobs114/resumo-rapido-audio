@@ -10,7 +10,7 @@ const Header = () => {
       <div className="container flex items-center justify-between h-16">
         <Link to="/" className="flex items-center gap-2">
           <FileAudio className="h-6 w-6 text-app-purple-600" />
-          <span className="font-bold text-xl">Resumo Rápido</span>
+          <span className="font-bold text-xl">Anamnese</span>
         </Link>
         
         <div className="flex items-center gap-4">
