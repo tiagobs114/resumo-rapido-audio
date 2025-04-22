@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import Header from '@/components/Header';
 import HeroSection from '@/components/HeroSection';
@@ -26,53 +25,11 @@ const LandingPage = () => {
   const templates: TemplateProps[] = [
     {
       id: 'general',
-      title: 'Anamnese Geral',
-      description: 'Modelo completo de anamnese para consultas gerais com histórico, queixas e exame físico.',
+      title: 'Anamnese Médica',
+      description: 'Gere anamneses médicas completas a partir do áudio da consulta.',
       icon: 'general',
       popular: true,
       onClick: () => handleTemplateSelect('general')
-    },
-    {
-      id: 'cardio',
-      title: 'Cardiologia',
-      description: 'Anamnese especializada para consultas cardiológicas com foco em sintomas cardiovasculares.',
-      icon: 'cardio',
-      onClick: () => handleTemplateSelect('cardio')
-    },
-    {
-      id: 'neuro',
-      title: 'Neurologia',
-      description: 'Modelo para avaliação neurológica completa, incluindo exame neurológico detalhado.',
-      icon: 'neuro',
-      onClick: () => handleTemplateSelect('neuro')
-    },
-    {
-      id: 'ortho',
-      title: 'Ortopedia',
-      description: 'Anamnese focada em problemas musculoesqueléticos, traumas e dores articulares.',
-      icon: 'ortho',
-      onClick: () => handleTemplateSelect('ortho')
-    },
-    {
-      id: 'pediatric',
-      title: 'Pediatria',
-      description: 'Modelo adaptado para consultas pediátricas, incluindo desenvolvimento e histórico vacinal.',
-      icon: 'pediatric',
-      onClick: () => handleTemplateSelect('pediatric')
-    },
-    {
-      id: 'oncology',
-      title: 'Oncologia',
-      description: 'Anamnese especializada para pacientes oncológicos, incluindo histórico de tratamentos e sintomas específicos.',
-      icon: 'oncology',
-      onClick: () => handleTemplateSelect('oncology')
-    },
-    {
-      id: 'custom',
-      title: 'Modelo Personalizado',
-      description: 'Crie seu próprio modelo de anamnese com campos e estrutura personalizados.',
-      icon: 'create',
-      onClick: () => setActiveTab('customTemplate')
     }
   ];
 
@@ -166,8 +123,8 @@ const LandingPage = () => {
                   
                   <div className="p-6">
                     <TabsContent value="templates" className="mt-0">
-                      <h2 className="text-2xl font-bold mb-6">Escolha um Modelo de Anamnese</h2>
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                      <h2 className="text-2xl font-bold mb-6">Escolha o Modelo de Anamnese</h2>
+                      <div className="grid grid-cols-1 gap-6">
                         {templates.map((template) => (
                           <TemplateCard 
                             key={template.id}

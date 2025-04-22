@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import Header from '@/components/Header';
 import TemplateCard, { TemplateProps } from '@/components/TemplateCard';
@@ -28,43 +27,14 @@ const Index = () => {
   const [transcription, setTranscription] = useState<string>('');
   const [report, setReport] = useState<{ title: string; content: string } | null>(null);
 
-  // Available templates
   const templates: TemplateProps[] = [
     {
       id: 'general',
-      title: 'Ata de Reunião',
-      description: 'Transforma gravações de reuniões em atas estruturadas com pontos de ação e decisões.',
+      title: 'Anamnese Médica',
+      description: 'Gere anamneses médicas completas a partir do áudio da consulta.',
       icon: 'general',
       popular: true,
       onClick: () => handleTemplateSelect('general')
-    },
-    {
-      id: 'cardio',
-      title: 'Anamnese Médica',
-      description: 'Organiza informações médicas em formato de anamnese com sintomas e histórico.',
-      icon: 'cardio',
-      onClick: () => handleTemplateSelect('cardio')
-    },
-    {
-      id: 'neuro',
-      title: 'Resumo de Aula',
-      description: 'Cria resumos organizados de aulas com conceitos-chave e pontos importantes.',
-      icon: 'neuro',
-      onClick: () => handleTemplateSelect('neuro')
-    },
-    {
-      id: 'oncology',
-      title: 'Anamnese Oncológica',
-      description: 'Modelo especializado para consultas oncológicas com histórico, sintomas e plano terapêutico.',
-      icon: 'oncology',
-      onClick: () => handleTemplateSelect('oncology')
-    },
-    {
-      id: 'custom',
-      title: 'Template Personalizado',
-      description: 'Crie seu próprio modelo de relatório com instruções personalizadas.',
-      icon: 'create',
-      onClick: () => handleCustomTemplate()
     }
   ];
 
@@ -137,8 +107,8 @@ const Index = () => {
       case AppStage.TEMPLATE_SELECTION:
         return (
           <div className="container max-w-4xl mx-auto px-4 py-8">
-            <h1 className="text-3xl font-bold text-center mb-8">Escolha um Template</h1>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <h1 className="text-3xl font-bold text-center mb-8">Escolha o Modelo</h1>
+            <div className="grid grid-cols-1 gap-6">
               {templates.map((template) => (
                 <TemplateCard 
                   key={template.id}
