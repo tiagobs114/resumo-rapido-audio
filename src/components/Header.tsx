@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { FileAudio, FileText, Home } from 'lucide-react';
+import { FileAudio, Home } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
 const Header = () => {
@@ -13,20 +13,11 @@ const Header = () => {
           <span className="font-bold text-xl">Resumo Rápido</span>
         </Link>
         
-        <nav className="hidden md:flex items-center gap-6">
-          <a href="#how-it-works" className="text-muted-foreground hover:text-foreground transition-colors flex items-center gap-2">
-            <FileText className="h-4 w-4" />
-            <span>Como Funciona</span>
-          </a>
-          <a href="#features" className="text-muted-foreground hover:text-foreground transition-colors flex items-center gap-2">
-            <Home className="h-4 w-4" />
-            <span>Recursos</span>
-          </a>
-        </nav>
-        
         <div className="flex items-center gap-4">
-          <Button variant="ghost" size="sm">Entrar</Button>
-          <Button>Começar</Button>
+          <Button variant="ghost" size="sm">
+            <Home className="h-4 w-4 mr-2" />
+            Início
+          </Button>
         </div>
       </div>
     </header>
